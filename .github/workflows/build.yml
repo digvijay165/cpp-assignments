@@ -1,0 +1,25 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile every program with warnings as errors
+        run: |
+          g++ --version
+          status=0
+          for f in assignment-*/*.cpp; do
+            if g++ -std=c++17 -Wall -Wextra -pedantic -Werror "$f" -o /tmp/program; then
+              echo "ok    $f"
+            else
+              echo "FAIL  $f"
+              status=1
+            fi
+          done
+          exit $status
